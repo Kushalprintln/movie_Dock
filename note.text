@@ -1,0 +1,21 @@
+HMTL
+You will be creating a web page that displays a list of movies from an API. You want to add some features to make the page more interactive and user-friendly. 
+
+This will be a step-by-step project. Follow these steps to complete the code:
+
+- HTML:
+    1. A header element that contains a link with a heading that says “Movie Deck”. The link will take the user to the home page of the application.
+    2. A search bar element that contains an input and a button. The input will allow the user to type in a movie name and the button will trigger a search function. The input has a placeholder text that says “Search by name…” and an autocomplete attribute that is set to off.
+    3. A sorting options element that contains two buttons. The buttons will allow the user to sort the movies by date or rating. The buttons have text content that says “Sort by date (oldest to latest)” and “Sort by rating (least to most)”.
+    4. A tabs element that contains two tabs. The tabs will allow the user to switch between all movies and favorite movies. The tabs have text content that says “All” and “Favorites”. The first tab has a class name of “active-tab” which indicates that it is selected by default
+    5. A movie list pagination buttons element that contains a list element and a pagination element. 
+    6. The list element will display the movies in cards. Each card will have an image, a title, a vote count, a vote average, and a favorite icon. The image will show the movie poster or a default image if the poster is not available. The title will show the movie name or “movie-title” if the name is not available. The vote count and vote average will show the number of votes and the rating of the movie or “vote-count” and “vote-average” if they are not available. The favorite icon will allow the user to mark or unmark the movie as a favorite. 
+    7. The pagination element will contain three buttons that will allow the user to navigate between different pages of movies. The buttons have text content that says “Previous”, “Current Page: 1”, and “Next”. The previous button is disabled by default because there is no previous page when the page loads.
+    8. A footer element that contains a paragraph with some information. The paragraph has text content that says “© 2023 Movie Deck”.
+
+    - CSS:
+    1. Add some styles to the HTML elements using colors, fonts, borders, margins, paddings, and other properties.
+    2. Use Flexbox to align and arrange the elements in different ways.
+    3. Use box-sizing, border-radius, cursor, and placeholder properties to customize the appearance and behavior of the elements.
+    4. Use a class name to indicate the active sorting button and tab button and change their background and text colors.
+    5. Uses Font Awesome to add an icon to the favorite button.

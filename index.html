@@ -5,41 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kushal Movies</title>
     <link rel="stylesheet" href="./style.css">
+    <script src="https://kit.fontawesome.com/f5f389989b.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
         <a href="#"><h1>Movie Deck</h1></a>
+        <iframe width="560" height="100%" src="https://www.youtube.com/embed/SMcOX9FC-mI?si=nekyBLaIdFE2CqxV?controls=0&showinfo=0&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <!-- <img src="./images/giphy.webp" alt=""> -->
     </header>
-    <div class="search-bar">
-        <input type="text" placeholder="Search by name..." autocomplete="off">
-        <button>Search</button>
+    <div class="search-section">
+        <div class="search-bar">
+            <input type="text" id="input" placeholder="Search by name..." autocomplete="off">
+            <button id="search-btn">Search</button>
+        </div>
+        <div class="sorting-options">
+            <button id="sbd">Sort by date (oldest to latest)</button>
+            <button id="sbr">Sort by rating (least to most)</button>
+        </div>
     </div>
-    <div class="sorting-options">
-        <button>Sort by date (oldest to latest)</button>
-        <button>Sort by rating (least to most)</button>
-    </div>
-    <div class="tabs">
-        <button class="active-tab">All</button>
-        <button>Favorites</button>
-    </div>
-    <div class="movie-list-pagination-buttons">
-        <div>
-            <div>
-                <img src="" alt="">
-                <div class="title">movie-title</div>
-                <div class="votecount">vote-count</div>
-                <div class="votavg">vote-average</div>
-                <div class="ico"></div>
+    
+    <div class="display-section">
+        <div class="tabs">
+            <button class="active-tab" id="all">All</button>
+            <button id="favorites">Favorites</button>
+        </div>
+        <div class="movie-list">
+            <div class="movie-card">
+                <img src="./images/il_570xN.2198543930_4qne.webp" alt="">
+                <div class="movie-details">
+                    <div class="title">movie-title</div>
+                    <div class="votecount">vote-count</div>
+                    <div class="votavg">vote-average</div>
+                    <div class="favrateico"><i class="fa-regular fa-star"></i></div>
+                </div>
             </div>
         </div>
         <div class="pagination">
-            <button disabled>Previous</button>
-            <button>Current Page: 1</button>
-            <button>Next</button>
+            <button disabled id="prev">Previous</button>
+            <button id="curr">Current Page: 1</button>
+            <button id="next">Next</button>
         </div>
     </div>
     <footer>
         <p>© 2023 Movie Deck</p>
     </footer>
+    <script src="./script.js"></script>
 </body>
 </html>
