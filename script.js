@@ -10,94 +10,112 @@ const curr = document.querySelector('#curr');
 const next = document.querySelector('#next');
 const movieList = document.querySelector('.movie-list');
 
-const favMovies = [];
-console.log(favMovies);
+// CREATING 2 ARRAYS FOR THE FAVOURITE;
+var favMovies = [];
+var favMovieDetails = [];
 
+// CHECKING IF PREVIOUS STORAGE IS AVAILABE IF AVAILABLE THEN UPDATING
+// THIS IS IIFE;
+(function updatePreviousStorage(){
+    // console.log("Checking Previous Update");
+    if(localStorage.getItem('Mov-ids')){
+        favMovies = JSON.parse(localStorage.getItem('Mov-ids'));
+        favMovieDetails = JSON.parse(localStorage.getItem('Mov-details'));
+
+        // printing
+        // console.log(favMovies);
+        // console.log(favMovieDetails);
+    }
+})();
+
+// PAGE NO. AND POSTER PATH
 let onPage = 1;
 const posterPath = 'https://image.tmdb.org/t/p/original/';
 
-function Firstpage() {
-    let movieapi = fetch('https://api.themoviedb.org/3/movie/top_rated?api_key=f531333d637d0c44abc85b3e74db2186&language=en-US&page=1');
-    movieapi.then((data) => {
-        return data.json();
-    }).then((data) => {
-        console.log(data);
-        let movieArray = data.results;
-        console.log(movieArray);
-        displayMovie(movieArray);
-        SBR.addEventListener('click', () => {
-            console.log("as per rating");
-            sortingOnRating(movieArray);
-        })
-        SBD.addEventListener('click', () => {
-            console.log("as per date");
-            sortingOnDate(movieArray);
-        })
-    })
-}
-Firstpage();
+// UPDATING FIRST PAGE
 
-// FETCHING DATA FOR NEXT AND PRE PAGE;
-function Nextpage(pagenum) {
+function pageUpdate(pagenum) {
     let movieapi = fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=f531333d637d0c44abc85b3e74db2186&language=en-US&page=${pagenum}`);
     movieapi.then((data) => {
         return data.json();
     }).then((data) => {
-        console.log(data);
-        let movieArray = data.results;
-        console.log(movieArray);
-        displayMovie(movieArray);
+        let movieArray = data.results; // EXTRACTING MOVIE ARRAY AND STOREING IT IN VARIBALE;
+
+        // printing
+        // console.log(data);
+        // console.log(movieArray);
+
+        displayMovie(movieArray); // CALLING THIS FOR DISPLAYING MOVIES;
+
+        // ADDING EVENT LISTNERS ON SORTING BUTTONS;
         SBR.addEventListener('click', () => {
-            console.log("as per rating");
+            // console.log("Sorting As Per Rating");
             sortingOnRating(movieArray);
         })
         SBD.addEventListener('click', () => {
-            console.log("as per date");
+            // console.log("Sorting As Per Date");
             sortingOnDate(movieArray);
         })
     })
 }
 
+pageUpdate();
+
 // DISPLAY MOVIE FUNCTION
 function displayMovie(movieArray) {
-    movieList.innerHTML = "";
+    movieList.innerHTML = "";             // FIRST OF ALL CLEARING PREVIOUS LOADED IMAGES;
     for (let movie of movieArray) {
-        // creating card of each movie
+        // CREATING CARD OF EACH MOVIE
+
         let moviecard = document.createElement('div');
         moviecard.setAttribute('class','movie-card');
+
         let poster = document.createElement('img');
         poster.setAttribute('src',`${posterPath}${movie.poster_path}`);
+
         let moviedetails = document.createElement('div');
         moviedetails.className = 'movie-details';
+
         let title = document.createElement('div');
         title.className = 'title';
         title.innerText = `${movie.title}`;
+
         let votecount = document.createElement('div');
         votecount.className = 'votecount';
         votecount.innerText = `${movie.vote_count}`;
+
         let votavg = document.createElement('div');
         votavg.className = 'votavg';
         votavg.innerText = `${movie.vote_average}`;
+
         let release = document.createElement('div');
         release.className = 'release';
         release.innerText = `${movie.release_date}`;
+
         let populrty = document.createElement('div');
         populrty.className = 'populrity';
         populrty.innerText = `${movie.popularity}`;
+
         let favico = document.createElement('div');
         favico.className = 'favrateico';
+
         let star = document.createElement('i');
+        star.classList.add('fa-star');
 
-        star.classList.add('fa-regular','fa-star');
-        favico.appendChild(star);
+        // CHECKING IF MOVIE IS PREVIOUSLY ABALIABE IN FAVOURITE
+        if(checkfav(movie.id)){ 
+            star.classList.add('fa-solid','fav'); // IF AVAILABE THEN SOLID STAR
+        }else{
+            star.classList.add('fa-regular'); // IF NOT THEN HOLLOW STAR
+        }
 
+        favico.appendChild(star); //APPENDING STAR IN FAVICO ELEMENT
+
+        // ADDING EVENTLISTNER FOR ADDING AND REMOVING FAV
         favico.addEventListener('click',()=>{
-            console.log(movie.title);
-            console.log(movie.id);
-            console.log(checkfav(movie.id));
-            favoriteAdding(star,movie.id);
+            favoriteAdding(star,movie.id,movie.title,movie.vote_count,movie.vote_average,movie.release_date,movie.popularity,movie.poster_path);
         })
-
+        // APPEDNING ALL THE ELEMENTS
         moviedetails.appendChild(title);
         moviedetails.appendChild(votecount);
         moviedetails.appendChild(votavg);
@@ -112,60 +130,95 @@ function displayMovie(movieArray) {
 }
 
 //ADDING AND REMOVING FROM FAVORITTE
- function favoriteAdding(star,movieid){
-    if(star.classList.contains("fa-regular")){
-        star.classList.replace('fa-regular','fa-solid');
-    }else{
-        star.classList.replace('fa-solid','fa-regular');
-    }
-    if(favMovies.includes(movieid)){
+ function favoriteAdding(star,movieid,moviename,vote,voteavg,reldate,popul,posterpath){
+    star.classList.toggle('fav');
+    if(checkfav(movieid)){
         let index = favMovies.indexOf(movieid);
         favMovies.splice(index,1);
-        console.log('removing from fav');
+        favMovieDetails.splice(index,1);
+        star.classList.replace('fa-solid','fa-regular');
+        // console.log(`${moviename} ${movieid} Already There In Fav`);
+        // console.log(`Removing ${moviename} From Fav`);
+        // only have ot do it when we are on the favsection;
+        // displayMovie(favMovieDetails);
+        //REMOVING IT FROM LOCALSTORAGE
+        storageUpdate();
     }else{
-        console.log("added to fav");
+        // console.log(`${moviename} ${movieid} Was Not There In Fav`);
+        // console.log(`${moviename} Now Added To Fav`);
         favMovies.push(movieid);
+        favMovieDetails.push({title:moviename,vote_count:vote,vote_average:voteavg,release_date:reldate,popularity:popul,poster_path:posterpath,id:movieid})
+        star.classList.replace('fa-regular','fa-solid');
+        //ADDING IT IN THE LOCALSTORAGE
+        storageUpdate();
+
     }
-    console.log(favMovies);
+    // printing array and checking
+    // console.log(favMovies);
+    // console.log(favMovieDetails);
  }
+
+// THIS FUNCTION WILL UPDATE LOCALSTORAGE ADDING AND REMOVING DONE IN THIS FUNCTION
+ function storageUpdate(){
+    console.log('Updating Local Storage');
+    localStorage.setItem('Mov-ids', JSON.stringify(favMovies));
+    localStorage.setItem('Mov-details',JSON.stringify(favMovieDetails));
+    //PRINT CHECK
+    console.log(localStorage.getItem('Mov-ids'));
+    console.log(localStorage.getItem('Mov-details'));
+ }
+
  // CHECKING WHTHER IT IS AVAILABLE IN FAVLIST
  function checkfav(movieid){
     return favMovies.includes(movieid);
  }
+
 // SORTING AS PER RATING
 function sortingOnRating(movieArray) {
-    const sortedarray = movieArray.sort((a, b) => {
+    movieArray.sort((a, b) => {
         return a.popularity - b.popularity;
     })
-    console.log(sortedarray);
     displayMovie(movieArray);
 }
 
 // SORTING AS PER DATES
 function sortingOnDate(movieArray) {
-    const sortedarray = movieArray.sort((a, b) => {
-        let aDate = new Date(a.release_date);
-        let bDate = new Date(b.release_date);
-        return aDate - bDate;
+    movieArray.sort((a, b) => {
+        return new Date(a.release_date) - new Date(b.release_date);
     })
-    console.log(sortedarray);
     displayMovie(movieArray);
 }
+//ADDING EVENT LISTNER ON ALL 
+all.addEventListener('click',()=>{
+    pageUpdate(onPage);;
+    prev.style.visibility = 'visible';
+    curr.style.visibility = 'visible';
+    next.style.visibility = 'visible';
+})
+//ADDING EVENT LISTENER ON FAV
+favorite.addEventListener('click',()=>{
+    displayMovie(favMovieDetails);
+    prev.style.visibility = "hidden";
+    curr.style.visibility = "hidden";
+    next.style.visibility = "hidden";
+})
 
 // ADDING EVEN LISTENER ON NEXT
 next.addEventListener('click',()=>{
     onPage++;
-    Nextpage(onPage);
+    pageUpdate(onPage);
     curr.innerHTML = `Current Page: ${onPage}`;
     lastpages();
 })
+
 // ADDING EVEN LISTENER ON PREV
 prev.addEventListener('click',()=>{
     onPage--;
-    Nextpage(onPage);
+    pageUpdate(onPage);
     curr.innerHTML = `Current Page: ${onPage}`;
     lastpages();
 })
+// CHECKING IF WEE REACH LAST PAGE
 function lastpages(){
     if(onPage === 1){
         prev.setAttribute('disabled',true);
