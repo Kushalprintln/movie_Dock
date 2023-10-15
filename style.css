@@ -3,6 +3,7 @@
     padding: 0;
     box-sizing: border-box;
     /* border: 1px solid black; */
+    font-family: sans-serif;
 }
 body{
     background-color: black;
@@ -14,7 +15,8 @@ button{
     outline: none;
     border: none;
     /* border-radius: 10px; */
-    /* background-color:#0f79af; */
+    background-color:#0f79af;
+    color: white;
 }
 header{
     height: 20vh;
@@ -71,6 +73,18 @@ header img{
 }
 .movie-details{
     padding: 10px;
+    text-align: center;
+}
+.title{
+    font-size: 18px;
+    font-weight: bolder;
+    color: yellow;
+}
+.title,.votecount,.votavg,.release,.populrity,.favrateico{
+    background-color: #2c2c2c;
+    margin-bottom: 5px;
+    padding: 5px 2px;
+    border-radius: 5px;
 }
 .pagination{
     width: fit-content;

@@ -10,6 +10,9 @@ const curr = document.querySelector('#curr');
 const next = document.querySelector('#next');
 const movieList = document.querySelector('.movie-list');
 
+const favMovies = [];
+console.log(favMovies);
+
 let onPage = 1;
 const posterPath = 'https://image.tmdb.org/t/p/original/';
 
@@ -60,20 +63,75 @@ function displayMovie(movieArray) {
     movieList.innerHTML = "";
     for (let movie of movieArray) {
         // creating card of each movie
-        movieList.innerHTML += `<div class="movie-card">
-                <img src="${posterPath}${movie.poster_path}" alt="">
-                <div class="movie-details">
-                    <div class="title">${movie.title}</div>
-                    <div class="votecount">${movie.vote_count}</div>
-                    <div class="votavg">${movie.vote_average}</div>
-                    <div class="favrateico"><i class="fa-regular fa-star"></i></div>
-                    <div>${movie.release_date}</div>
-                    <div>${movie.popularity}</div>
-                </div>
-            </div>`;
+        let moviecard = document.createElement('div');
+        moviecard.setAttribute('class','movie-card');
+        let poster = document.createElement('img');
+        poster.setAttribute('src',`${posterPath}${movie.poster_path}`);
+        let moviedetails = document.createElement('div');
+        moviedetails.className = 'movie-details';
+        let title = document.createElement('div');
+        title.className = 'title';
+        title.innerText = `${movie.title}`;
+        let votecount = document.createElement('div');
+        votecount.className = 'votecount';
+        votecount.innerText = `${movie.vote_count}`;
+        let votavg = document.createElement('div');
+        votavg.className = 'votavg';
+        votavg.innerText = `${movie.vote_average}`;
+        let release = document.createElement('div');
+        release.className = 'release';
+        release.innerText = `${movie.release_date}`;
+        let populrty = document.createElement('div');
+        populrty.className = 'populrity';
+        populrty.innerText = `${movie.popularity}`;
+        let favico = document.createElement('div');
+        favico.className = 'favrateico';
+        let star = document.createElement('i');
+
+        star.classList.add('fa-regular','fa-star');
+        favico.appendChild(star);
+
+        favico.addEventListener('click',()=>{
+            console.log(movie.title);
+            console.log(movie.id);
+            console.log(checkfav(movie.id));
+            favoriteAdding(star,movie.id);
+        })
+
+        moviedetails.appendChild(title);
+        moviedetails.appendChild(votecount);
+        moviedetails.appendChild(votavg);
+        moviedetails.appendChild(release);
+        moviedetails.appendChild(populrty);
+        moviedetails.appendChild(favico);
+        moviecard.appendChild(poster);
+        moviecard.appendChild(moviedetails);
+        movieList.appendChild(moviecard);
+   
     }
 }
 
+//ADDING AND REMOVING FROM FAVORITTE
+ function favoriteAdding(star,movieid){
+    if(star.classList.contains("fa-regular")){
+        star.classList.replace('fa-regular','fa-solid');
+    }else{
+        star.classList.replace('fa-solid','fa-regular');
+    }
+    if(favMovies.includes(movieid)){
+        let index = favMovies.indexOf(movieid);
+        favMovies.splice(index,1);
+        console.log('removing from fav');
+    }else{
+        console.log("added to fav");
+        favMovies.push(movieid);
+    }
+    console.log(favMovies);
+ }
+ // CHECKING WHTHER IT IS AVAILABLE IN FAVLIST
+ function checkfav(movieid){
+    return favMovies.includes(movieid);
+ }
 // SORTING AS PER RATING
 function sortingOnRating(movieArray) {
     const sortedarray = movieArray.sort((a, b) => {
