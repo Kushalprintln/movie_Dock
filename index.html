@@ -30,6 +30,7 @@
             <button class="active-tab" id="all">All</button>
             <button id="favorites">Favorites</button>
         </div>
+        
         <div class="movie-list">
             <div class="movie-card">
                 <img src="./images/il_570xN.2198543930_4qne.webp" alt="">
@@ -77,14 +78,14 @@
             </div>
         </div>
         <div class="pagination">
-            <button class="lights" style="--clr:#39FF14"><span>Prev</span><i></i></button>
+            <button id="prev" disabled class="lights" style="--clr:#39FF14"><span>Prev</span><i></i></button>
             <button id="curr">Current Page: 1</button>
-            <button class="lights" style="--clr:#0FF0FC"><span>next</span><i></i></button>
+            <button id="next" class="lights" style="--clr:#0FF0FC"><span>next</span><i></i></button>
         </div>
     </div>
     <footer>
         <p>© 2023 Movie Deck</p>
     </footer>
-    <!-- <script src="./script.js"></script> -->
+    <script src="./script.js"></script>
 </body>
 </html>

@@ -231,6 +231,7 @@ header img {
 }
 
 .pagination {
+    height: 55px;
     width: fit-content;
     margin: 0px auto;
 }
