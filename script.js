@@ -152,8 +152,6 @@ function pageUpdate(pagenum) {
 }
 pageUpdate(onPage);
 
-pageUpdate();
-
 // DISPLAY MOVIE FUNCTION
 function displayMovie(movieArray) {
     movieList.innerHTML = "";             // FIRST OF ALL CLEARING PREVIOUS LOADED IMAGES;
