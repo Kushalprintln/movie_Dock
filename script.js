@@ -9,6 +9,7 @@ const prev = document.querySelector('#prev');
 const curr = document.querySelector('#curr');
 const next = document.querySelector('#next');
 const movieList = document.querySelector('.movie-list');
+const searchpannel = document.querySelector('.search-list');
 
 // CREATING 2 ARRAYS FOR THE FAVOURITE;
 var favMovies = [];
@@ -31,6 +32,9 @@ var favMovieDetails = [];
 // PAGE NO. AND POSTER PATH
 let onPage = 1;
 const posterPath = 'https://image.tmdb.org/t/p/original/';
+
+// ON PAGE SECTION PART
+let onSection = 'all';
 
 // UPDATING FIRST PAGE
 
@@ -56,8 +60,97 @@ function pageUpdate(pagenum) {
             // console.log("Sorting As Per Date");
             sortingOnDate(movieArray);
         })
+        // ADDING EVENT LISTNER ON THE SEARCH BAR
+        input.addEventListener('input',(event)=>{
+            debounce(()=>{
+                let searchEle = event.target.value.toLowerCase();
+                let searchArray = movieArray.filter((value)=>{
+                    // console.log(value.title);
+                    // return value.title;
+                    let movieLow = value.title.toLowerCase();
+                    if(movieLow.includes(searchEle)){
+                        return true;
+                    }
+                })
+                if(event.target.value.length > 0){
+                    searchpannel.style.display = 'flex';
+                    if(searchArray.length !=0 ){
+                        creatingSearchList(searchArray);
+                    }
+                    else{
+                        emptylist();
+                    }
+                }else{
+                    searchpannel.style.display = 'none';
+                }
+            },1000)
+
+        })
+        // DEBOUNCING FUNCTION FOR SEARCH
+        let prevId;
+        function debounce(fn,delay){
+            if(prevId){
+                clearTimeout(prevId);
+            }
+            prevId = setTimeout(() => {
+                fn();0.
+            }, delay);
+        }
+        // CREATING SEARCH LIST
+        function creatingSearchList(searchArray){
+            searchpannel.innerHTML = '';
+            for(let movies of searchArray){
+                let Mlist = document.createElement('div');
+                Mlist.className = 'list-movie';
+
+                let sideImage = document.createElement('img');
+                sideImage.setAttribute('src',`${posterPath}${movies.backdrop_path}`);
+
+                let Mdetail = document.createElement('div');
+                Mdetail.className = 'list-movie-details';
+
+                let Mtitle = document.createElement('h3');
+                Mtitle.innerHTML = movies.title;
+
+                let Mspan = document.createElement('span');
+                Mspan.innerHTML = movies.release_date;
+
+                //APPENDING
+                Mdetail.appendChild(Mtitle);
+                Mdetail.appendChild(Mspan);
+                Mlist.appendChild(sideImage);
+                Mlist.appendChild(Mdetail);
+                searchpannel.appendChild(Mlist);
+            }
+        }
+        function emptylist(){
+            searchpannel.innerHTML = '';
+            let Mlist = document.createElement('div');
+            Mlist.className = 'list-movie';
+
+            let sideImage = document.createElement('img');
+            sideImage.setAttribute('src','./images/ticket-2974645_1280.jpg');
+
+            let Mdetail = document.createElement('div');
+            Mdetail.className = 'list-movie-details';
+
+            let Mtitle = document.createElement('h3');
+            Mtitle.innerHTML = "No Result Found For This Search";
+
+            let Mspan = document.createElement('span');
+            Mspan.innerHTML = "Please search again";
+
+            //APPENDING
+            Mdetail.appendChild(Mtitle);
+            Mdetail.appendChild(Mspan);
+            Mlist.appendChild(sideImage);
+            Mlist.appendChild(Mdetail);
+            searchpannel.appendChild(Mlist);
+
+        }
     })
 }
+pageUpdate(onPage);
 
 pageUpdate();
 
@@ -140,7 +233,10 @@ function displayMovie(movieArray) {
         // console.log(`${moviename} ${movieid} Already There In Fav`);
         // console.log(`Removing ${moviename} From Fav`);
         // only have ot do it when we are on the favsection;
-        // displayMovie(favMovieDetails);
+        // RERENDERING THE MOVIES IF WE ARE ON THE FAV SECTION PAGE..
+        if(onSection === 'fav'){
+            displayMovie(favMovieDetails);
+        } 
         //REMOVING IT FROM LOCALSTORAGE
         storageUpdate();
     }else{
@@ -190,7 +286,8 @@ function sortingOnDate(movieArray) {
 }
 //ADDING EVENT LISTNER ON ALL 
 all.addEventListener('click',()=>{
-    pageUpdate(onPage);;
+    pageUpdate(onPage);
+    onSection = 'all'
     prev.style.visibility = 'visible';
     curr.style.visibility = 'visible';
     next.style.visibility = 'visible';
@@ -198,6 +295,7 @@ all.addEventListener('click',()=>{
 //ADDING EVENT LISTENER ON FAV
 favorite.addEventListener('click',()=>{
     displayMovie(favMovieDetails);
+    onSection = 'fav'
     prev.style.visibility = "hidden";
     curr.style.visibility = "hidden";
     next.style.visibility = "hidden";
